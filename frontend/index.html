@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="version" content="1" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
+    <title>OM Mascot</title>
+</head>
+
+<body>
+    <main class="container">
+        <h1>OM Mascot Generator</h1>
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+        <div class="grid">
+            <article>
+                <h2>Prompt</h2>
+                <textarea></textarea>
+                <section>
+                    <h2>Logo options</h2>
+                    <input type="radio" name="option" value="op1" />
+                    <label>Option 1</label>
+                    <input type="radio" name="option" value="op2" />
+                    <label>Option 2</label>
+                    <input type="radio" name="option" value="op3" />
+                    <label>Option 3</label>
+                </section>
+                <button id="generate-button">Generate</button>
+            </article>
+            <article>
+                <h2>Image gallery</h2>
+                <div id="gallery"></div>
+            </article>
+        </div>
+
+        <script>
+            let ui = {
+                htmlGenerateButton: document.querySelector("#generate-button"),
+                htmlGallery: document.querySelector("#gallery"),
+            }
+
+        </script>
+        <script>
+            // Initialize the agent at application startup.
+            const fpPromise = import('https://openfpcdn.io/fingerprintjs/v4').then(
+              (FingerprintJS) => FingerprintJS.load()
+            );
+          
+            // Get the visitor identifier when you need it.
+            fpPromise
+              .then((fp) => fp.get())
+              .then((result) => {
+                // This is the visitor identifier:
+                const visitorId = result.visitorId;
+                console.log(visitorId);
+              })
+              .catch((error) => console.error(error));
+          </script>
+          
+
+    </main>
+</body>
+
+</html>
