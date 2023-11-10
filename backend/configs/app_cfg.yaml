@@ -1,0 +1,5 @@
+sqlite: "sqlite:///./sql_app.db"
+api:
+  origins:
+    - "http://localhost:8001"
+    - "http://0.0.0.0:8001"

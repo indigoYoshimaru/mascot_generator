@@ -1,0 +1,11 @@
+device: cuda
+model_name: "kandinsky-community/kandinsky-2-2-decoder"
+lora_model_path: "models/weight/kandinsky-2-2-logo/checkpoint-2500"
+example_prompts: 
+  - "a large, stunning, cool lighting, funky background, clear, colorful, animated smiley monkey wearing hat, shirt, and dark glasses, jewelries as a mascot, with {logo_description} on the shirt"
+hyper_params: 
+  prior_guidance_scale: 1.0
+  height: 512
+  width: 512
+  num_inference_steps: 30
+output_image_directory: 

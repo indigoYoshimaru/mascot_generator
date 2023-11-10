@@ -3,6 +3,8 @@ import os
 from fastapi import FastAPI
 from backend.utils import get_logger
 from backend.routers import get_all_routers
+from fastapi.middleware.cors import CORSMiddleware
+
 
 # from search_api.models.spelling_corrector import SpellingCorrectorModel
 # from search_api.app_models.settings import SpellingCorrectorSettings
@@ -35,6 +37,18 @@ try:
         docs_url="/docs",
         redoc_url="/redoc",
         root_path=os.getenv("ROOT_PATH", ""),
+    )
+
+    origins = [
+        "http://localhost:8001",
+        "http://0.0.0.0:8001"
+    ]
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
 
     for router in get_all_routers():

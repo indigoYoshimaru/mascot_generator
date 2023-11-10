@@ -35,32 +35,49 @@
                 <div id="gallery"></div>
             </article>
         </div>
-
+        <script src="scripts/fingerprint.js"></script>
         <script>
+            beUrl = "https://ecd9-2402-800-637c-32-8ac1-7f11-c9b1-249c.ngrok-free.app/"
             let ui = {
                 htmlGenerateButton: document.querySelector("#generate-button"),
                 htmlGallery: document.querySelector("#gallery"),
             }
 
-        </script>
-        <script>
-            // Initialize the agent at application startup.
-            const fpPromise = import('https://openfpcdn.io/fingerprintjs/v4').then(
-              (FingerprintJS) => FingerprintJS.load()
-            );
-          
-            // Get the visitor identifier when you need it.
-            fpPromise
-              .then((fp) => fp.get())
-              .then((result) => {
-                // This is the visitor identifier:
-                const visitorId = result.visitorId;
-                console.log(visitorId);
-              })
-              .catch((error) => console.error(error));
-          </script>
-          
+            getVisitorId()
+                .then(visitorInfo => {
+                    console.log(visitorInfo);
+                    let data = JSON.stringify({
+                        "visitor_id": visitorInfo['visitorId'],
+                        "status": visitorInfo['status']
+                    });
+                    console.log(data);
+                    fetch(beUrl + "user/register", {
+                        method: "POST",
+                        mode: 'cors',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Origin': 'http://0.0.0.0:8001',
+                            'Access-Control-Request-Method': 'POST',
+                            'Access-Control-Request-Headers':'Content-Type, Authorization'
+                        },
+                        body: data,
+                    })
+                        .then(response => response.json())
+                        .then(result => {
+                            // Handle the response data here
+                            console.log(result);
+                        })
+                        .catch(error => {
+                            // Handle any errors that occur during the request
+                            console.error(error);
+                        });
+                })
+                .catch(error => {
+                    console.error(error);
+                });
 
+        </script>
     </main>
 </body>
 
