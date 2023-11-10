@@ -1,4 +1,4 @@
-sqlite: "sqlite:///./sql_app.db"
+sqlite: "sqlite:///backend/assets/mascot.db"
 api:
   origins:
     - "http://localhost:8001"

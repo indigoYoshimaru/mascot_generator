@@ -4,6 +4,9 @@ from fastapi import FastAPI
 from backend.utils import get_logger
 from backend.routers import get_all_routers
 from fastapi.middleware.cors import CORSMiddleware
+from backend.sql_app.database import SessionLocal, engine
+from backend.sql_app import crud, models, schemas
+
 
 
 # from search_api.models.spelling_corrector import SpellingCorrectorModel
@@ -38,6 +41,9 @@ try:
         redoc_url="/redoc",
         root_path=os.getenv("ROOT_PATH", ""),
     )
+
+    models.Base.metadata.create_all(bind=engine)
+
 
     origins = [
         "http://localhost:8001",
