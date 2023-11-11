@@ -1,5 +1,16 @@
-sqlite: "sqlite:///backend/assets/mascot.db"
+database: 
+  url: "sqlite:///backend/sql_app/mascot.db"
+  connect_args: 
+    check_same_thread: False
+  session_args: 
+    autocommit: False
+    autoflush: False
+    bind: engine
 api:
   origins:
     - "http://localhost:8001"
     - "http://0.0.0.0:8001"
+other_config_paths: 
+  model_config: backend/configs/model_cfg.yaml
+
+

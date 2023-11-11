@@ -5,21 +5,10 @@ from backend.utils import get_logger
 from backend.routers import get_all_routers
 from fastapi.middleware.cors import CORSMiddleware
 from backend.sql_app.database import SessionLocal, engine
-from backend.sql_app import crud, models, schemas
-
-
-
-# from search_api.models.spelling_corrector import SpellingCorrectorModel
-# from search_api.app_models.settings import SpellingCorrectorSettings
-# from search_api.handlers.log_writer import LogWriter
+from backend.sql_app import crud, models, database
+from backend.app_models import schemas
 
 # logger = get_logger(name = __name__)
-
-# def number_of_workers():
-#     import multiprocessing
-
-#     return int(multiprocessing.cpu_count() / 2)
-
 
 # def load_model():
 #     vsc_setting = SpellingCorrectorSettings(
@@ -29,10 +18,10 @@ from backend.sql_app import crud, models, schemas
 
 
 try:
-    # SPELL_CORRECTOR = load_model()
-    # logger.info(f"model loaded: {id(SPELL_CORRECTOR)} - {SPELL_CORRECTOR}")
-    # LOG_WRITER = LogWriter(cfg_dir="search_api/configs/json_bin.yaml")
-    # logger.info(f"Starting app...")
+
+    print(f"Starting app...")
+    models.Base.metadata.create_all(bind=engine)
+
     app = FastAPI(
         title="Mascot Generator",
         description="Mascot Generator by MLEM",
@@ -41,8 +30,6 @@ try:
         redoc_url="/redoc",
         root_path=os.getenv("ROOT_PATH", ""),
     )
-
-    models.Base.metadata.create_all(bind=engine)
 
 
     origins = [
@@ -59,5 +46,8 @@ try:
 
     for router in get_all_routers():
         app.include_router(router)
+    
+    
 except Exception as e:
+    print(e)
     raise RuntimeError(f"Cannot start app due to error {e}")

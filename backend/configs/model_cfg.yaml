@@ -8,4 +8,10 @@ hyper_params:
   height: 512
   width: 512
   num_inference_steps: 30
-output_image_directory: 
+logo_descriptions: 
+  0: ""
+  1: ""
+  2: ""
+  3: ""
+  4: ""
+output_image_directory: ""

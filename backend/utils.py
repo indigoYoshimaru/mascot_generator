@@ -18,8 +18,18 @@ def get_host_info():
         ip_address=ip_address,
     )
 
+def get_db():
+    from backend.sql_app.database import SessionLocal
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-# @lru_cache()
-# def get_settings():
-#     from backend.app_models.settings import AppSetting
-#     return AppSetting(cfg_dir='search_api/configs/cfg.yaml')
+
+@lru_cache()
+def get_settings():
+    from backend.app_models.configs import AppConfig
+    return AppConfig(cfg_dir='backend/configs/app_cfg.yaml')
+
+app_config = get_settings()

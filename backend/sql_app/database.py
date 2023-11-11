@@ -1,13 +1,21 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from backend.utils import app_config, get_logger
 
-SQLALCHEMY_DATABASE_URL =  "sqlite:///backend/assets/mascot.db"
-# SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db"
+logger = get_logger(__name__)
+
+logger.info(f"{app_config=}")
 
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+    url=app_config.db_config.url,
+    connect_args=app_config.db_config.connect_args,
+    echo=True,
 )
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(**app_config.db_config.session_args)
 
 Base = declarative_base()
+
+logger.info(f"{engine=}")
+logger.info(f"{SessionLocal=}")
+logger.info(f"{Base=}")
