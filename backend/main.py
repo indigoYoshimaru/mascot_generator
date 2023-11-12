@@ -1,6 +1,8 @@
 import os
 
 from fastapi import FastAPI
+
+from fastapi.staticfiles import StaticFiles
 from backend.utils import get_logger
 from backend.routers import get_all_routers
 from fastapi.middleware.cors import CORSMiddleware
@@ -31,6 +33,7 @@ try:
         root_path=os.getenv("ROOT_PATH", ""),
     )
 
+    app.mount("/frontend", StaticFiles(directory ="frontend", html=True), name = "frontend" )
 
     origins = [
         "http://localhost:8001",

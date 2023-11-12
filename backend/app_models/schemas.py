@@ -3,7 +3,6 @@ from typing import Text, Any
 
 class VisitorInfo(BaseModel):
     visitor_id: Text
-    status: Text
 
 class Image(BaseModel): 
     path: Text
