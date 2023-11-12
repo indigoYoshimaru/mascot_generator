@@ -29,18 +29,30 @@ def generate_image(
     from backend.app_models.txt2img import merge_prompt
     from datetime import datetime
     import os
-    try: 
+
+    try:
+        visitor_id = session_data.visitor_id
+
         # 0. check if a generation is running or no generation left
-        # gen_left = crud.get_user_generation_left()
-        # response_model = crud.get_running_generation_by_visistor_id()
+        gen_left = crud.get_user_generation_left(db, visitor_id=visitor_id)
+        response_model = crud.get_running_generation_by_visistor_id(
+            db,
+            visitor_id = visitor_id,
+        )
+        logger.info(f'{gen_left=}')
+        logger.info(f'{response_model=}')
+        if not gen_left or response_model:
+            raise MemoryError(
+                "You either have exceeded your generation or having a running generation"
+            )
+
         # 1. merge prompt
         prompt = merge_prompt(generation_data)
-        logger.info(f'{prompt=}')
+        logger.info(f"{prompt=}")
         # 2. create start time
         curr_dt = datetime.now()
         start_time = int(round(curr_dt.timestamp()))
         # 3. create image path as placeholder
-        visitor_id = session_data.visitor_id
         image_path = os.path.join(
             "frontend/images",
             visitor_id,
@@ -54,12 +66,20 @@ def generate_image(
             start_time=start_time,
             image_path=image_path,
         )
-        logger.info(f'Create new generation {response_model} from {visitor_id} at {curr_dt}')
+        logger.info(
+            f"Create new generation {response_model} from {visitor_id} at {curr_dt}"
+        )
         # 5. call background task
+    except MemoryError as e:
+        logger.error(f"{type(e).__name__}: {e}")
+        raise HTTPException(
+            status_code=400,
+            detail=str(e),
+        )
     except Exception as e:
         logger.error(f"{type(e).__name__}: {e}")
         raise e
-    else: 
+    else:
         return response_model
 
 

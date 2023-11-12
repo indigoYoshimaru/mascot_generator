@@ -63,7 +63,7 @@ def get_latest_generation_info(db: Session, visitor_id: Text):
         generation = (
             db.query(models.Generation)
             .filter(models.User.visitor_id == visitor_id)
-            .order_by(models.Generation.start_time.asc())
+            .order_by(models.Generation.start_time.desc())
         ).first()
         logger.info(f"{generation=}")
         if not generation:
@@ -91,6 +91,16 @@ def get_latest_generation_info(db: Session, visitor_id: Text):
 
 
 def get_generation_by_latest_queue(db: Session):
+    generation = models.Generation
+    return (
+        db.query(generation)
+        .filter(generation.status == "IN-QUEUE")
+        .order_by(generation.queue_no.desc())
+        .first()
+    )
+
+
+def get_generation_in_queue_for_model(db: Session):
     generation = models.Generation
     return (
         db.query(generation)
@@ -132,6 +142,22 @@ def get_image_by_id(db: Session, image_id: int):
 
 def get_images_by_user(db: Session, visitor_id: Text):
     ...
+
+
+def get_running_generation_by_visistor_id(db, visitor_id: Text):
+    try:
+        user = get_user(db, visitor_id=visitor_id)
+        model = models.Generation
+        generation = (
+            db.query(model)
+            .filter(model.user_id == user.id, model.status != "DONE")
+            .first()
+        )
+    except Exception as e:
+        logger.error(f"{type(e).__name__}: {e}")
+        raise e
+    else:
+        return generation
 
 
 # CREATE
@@ -192,8 +218,9 @@ def create_generation(
     try:
         prompt = create_prompt(db, prompt=prompt)
         image = create_image(db, image_path=image_path)
-        logger.info(f'{prompt=}')
-        logger.info(f'{image=}')
+        user = get_user(db, visitor_id)
+        logger.info(f"{prompt=}")
+        logger.info(f"{image=}")
 
         latest_gen = get_generation_by_latest_queue(db)
         if not latest_gen:
@@ -201,13 +228,13 @@ def create_generation(
         else:
             queue_no = latest_gen.queue_no + 1
         generation = models.Generation(
-            user_id=visitor_id,
+            user_id=user.id,
             prompt_id=prompt.id,
             image_id=image.id,
             queue_no=queue_no,
             status="IN-QUEUE",
             start_time=start_time,
-            end_time = 0
+            end_time=0,
         )
         model = __add__(db, generation)
 

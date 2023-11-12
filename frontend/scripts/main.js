@@ -102,10 +102,10 @@ async function run() {
 
         lock();
 
+        let res = null;
         try {
-            let res = null;
             while (!res) {
-                res = await fetch("/txt2img/generate", {
+                let response = await fetch("/txt2img/generate", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -115,11 +115,18 @@ async function run() {
                         option: document.querySelector("input[name=option]:checked").value | 0
                     })
                 });
+                if (response.status==403)
+                    continue;
+                res = await(response.json());
+                
             }
+            console.log(res)
             update();
         }
         finally {
             unlock();
+            if (res.detail)
+                ui.htmlPrompt.value = res.detail;
         }
     });
 
@@ -127,8 +134,9 @@ async function run() {
         if (!ui.htmlPrompt.value.includes(ui.htmlPrompt.placeholder))
             ui.htmlPrompt.value += ui.htmlPrompt.placeholder;
     });
-    setInterval(update, 10000);
+    setInterval(update, 5000);
     console.log(result);
+
 }
 
 
