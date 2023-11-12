@@ -5,7 +5,7 @@ database:
   session_args: 
     autocommit: False
     autoflush: False
-    bind: engine
+    bind: null
 api:
   origins:
     - "http://localhost:8001"

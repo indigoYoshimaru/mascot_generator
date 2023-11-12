@@ -15,9 +15,9 @@ def get_user(db: Session, visitor_id: Text):
     try:
         logger.info(f'{visitor_id=}')
         logger.info(f'{models.User.visitor_id=}')
-        user =  db.query(models.User).filter(models.User.visitor_id == visitor_id).first()
-        logger.info(f'user {user=}')
-        return user
+        for user in db.query(models.User).all():
+            logger.info(f'user {user=}')
+            return user
     except Exception as e:
         logger.error(f"{type(e).__name__}: {e}")
         raise e

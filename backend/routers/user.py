@@ -4,7 +4,8 @@ from backend.utils import get_logger
 from backend.app_models.schemas import VisitorInfo
 from backend.sql_app import crud
 from backend.app_models import schemas
-from backend.utils import get_db
+from backend.sql_app.database import get_db
+
 
 router = APIRouter()
 logger = get_logger(name=__name__)

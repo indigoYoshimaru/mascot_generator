@@ -18,14 +18,6 @@ def get_host_info():
         ip_address=ip_address,
     )
 
-def get_db():
-    from backend.sql_app.database import SessionLocal
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
 
 @lru_cache()
 def get_settings():

@@ -31,7 +31,7 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Numeric, primary_key=True, nullable=False, unique=True, index=True)
-    visitor_id = Column(String, primary_key=True, nullable=False)
+    visitor_id = Column(String, nullable=False)
     gen_left = Column(Numeric, nullable=False, server_default="10")
 
 
