@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Text, Any
 
 
@@ -7,7 +7,7 @@ class VisitorInfo(BaseModel):
 
 
 class Image(BaseModel):
-    path: Text = ""
+    path: Text = Field(default="")
 
     # data: Any
     class Config:
@@ -15,7 +15,7 @@ class Image(BaseModel):
 
 
 class Prompt(BaseModel):
-    prompt: Text = ""
+    prompt: Text = Field(default="")
 
 
 class User(BaseModel):
@@ -29,15 +29,17 @@ class User(BaseModel):
 class GenerationInfo(BaseModel):
     prompt: Prompt
     image: Image
-    queue_no: int = 0
-    start_time: int = 0
-    end_time: int = 0
-    status: Text = ""
+    queue_no: int = Field(default=0)
+    start_time: int = Field(default=0)
+    end_time: int = Field(default=0)
+    status: Text = Field(default="")
 
-class GenerationRequest(BaseModel): 
-    prompt: Text = ''
-    option: int = 1
-    
+
+class GenerationRequest(BaseModel):
+    prompt: Text = Field(default="")
+    option: int = Field(default=1)
+
+
 class AllInfo(BaseModel):
     user: User
     generation_info: GenerationInfo

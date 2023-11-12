@@ -20,15 +20,15 @@ def get_user(db: Session, visitor_id: Text):
             db.query(models.User).filter(models.User.visitor_id == visitor_id).first()
         )
         if not user:
-            model = register_user(db, visitor_id)
-            logger.info(f"{model=}")
+            user = register_user(db, visitor_id)
+            logger.info(f"{user=}")
             # user = (
             #     db.query(models.User)
             #     .filter(models.User.visitor_id == visitor_id)
             #     .first()
             # )
 
-        return model
+        return user
 
     except Exception as e:
         logger.error(f"{type(e).__name__}: {e}")
@@ -76,19 +76,16 @@ def get_latest_generation_info(db: Session, visitor_id: Text):
         prompt = get_prompt_by_id(db, generation.prompt_id)
         image = get_image_by_id(db, generation.image_id)
         generation_info = schemas.GenerationInfo(
-            prompt=schemas.Prompt(prompt=prompt),
+            prompt=schemas.Prompt(prompt=prompt.prompt),
             image=schemas.Image(path=image.path),
             queue_no=generation.queue_no,
             status=generation.status,
             start_time=generation.start_time,
             end_time=generation.end_time,
         )
+        # remember to add update generation left
     except Exception as e:
         logger.error(f"{type(e).__name__}: {e}")
-        return schemas.GenerationInfo(
-            prompt=schemas.Prompt(),
-            image=schemas.Image(),
-        )
     else:
         return generation_info
 
@@ -145,6 +142,7 @@ def __add__(db, model):
         db.add(model)
         db.commit()
         db.refresh(model)
+        logger.info(f"{model=}")
     except Exception as e:
         raise e
     else:
@@ -165,7 +163,7 @@ def register_user(db: Session, visitor_id: Text):
 def create_prompt(db: Session, prompt: Text):
     try:
         model = models.Prompt(prompt=prompt)
-        model = __add__(model)
+        model = __add__(db, model)
     except Exception as e:
         logger.error(f"{type(e).__name__}: {e}")
         raise e
@@ -176,7 +174,7 @@ def create_prompt(db: Session, prompt: Text):
 def create_image(db: Session, image_path: Text):
     try:
         model = models.Image(path=image_path)
-        model = __add__(model)
+        model = __add__(db, model)
     except Exception as e:
         logger.error(f"{type(e).__name__}: {e}")
         raise e
@@ -193,19 +191,26 @@ def create_generation(
 ):
     try:
         prompt = create_prompt(db, prompt=prompt)
-        image = create_image(db, path=image_path)
+        image = create_image(db, image_path=image_path)
+        logger.info(f'{prompt=}')
+        logger.info(f'{image=}')
 
         latest_gen = get_generation_by_latest_queue(db)
-
+        if not latest_gen:
+            queue_no = 1
+        else:
+            queue_no = latest_gen.queue_no + 1
         generation = models.Generation(
             user_id=visitor_id,
-            prompt=prompt.id,
-            image=image.id,
-            queue_no=latest_gen.queue_no + 1,
+            prompt_id=prompt.id,
+            image_id=image.id,
+            queue_no=queue_no,
             status="IN-QUEUE",
             start_time=start_time,
+            end_time = 0
         )
-        model = __add__(generation)
+        model = __add__(db, generation)
+
     except Exception as e:
         logger.error(f"{type(e).__name__}: {e}")
         raise e

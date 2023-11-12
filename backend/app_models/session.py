@@ -1,10 +1,13 @@
-from uuid import UUID, uuid4
 from pydantic import BaseModel
+from uuid import UUID, uuid4
 from fastapi import HTTPException, Response
 from fastapi_sessions.backends.implementations import InMemoryBackend
 from fastapi_sessions.session_verifier import SessionVerifier
 from fastapi_sessions.frontends.implementations import SessionCookie, CookieParameters
+from fastapi_sessions.backends.session_backend import BackendError
+from backend.utils import get_logger
 
+logger = get_logger(__name__)
 
 class SessionData(BaseModel):
     visitor_id: str
@@ -66,7 +69,25 @@ verifier = BasicVerifier(
 )
 
 async def create_session(visitor_id: str, response: Response):
-    session = uuid4()
-    data = SessionData(visitor_id=visitor_id)
-    await backend.create(session, data)
-    cookie.attach_to_response(response, session)
+    try:
+        session = uuid4()
+        data = SessionData(visitor_id=visitor_id)
+        await backend.create(session, data)
+        cookie.attach_to_response(response, session)
+    except BackendError as e: 
+        logger.error(f"{type(e).__name__}: {e}")
+
+        if str(e) == "create can't overwrite an existing session": 
+            return 'available session'
+        else: 
+            raise e
+
+    except Exception as e: 
+        logger.error(f"{type(e).__name__}: {e}")
+        raise e
+    else: 
+        return session
+    
+async def delete_session(session_id, response):
+    await backend.delete(session_id)
+    cookie.delete_from_response(response)

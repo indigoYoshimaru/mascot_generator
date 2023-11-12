@@ -2,16 +2,19 @@ device: cuda
 model_name: "kandinsky-community/kandinsky-2-2-decoder"
 lora_model_path: "models/weight/kandinsky-2-2-logo/checkpoint-2500"
 example_prompts: 
-  - "a large, stunning, cool lighting, funky background, clear, colorful, animated smiley monkey wearing hat, shirt, and dark glasses, jewelries as a mascot, with {logo_description} on the shirt"
+  - "a detailed, large, stunning, cool lighting, funky background, clear, colorful, animated smiley monkey wearing hat, shirt, and dark glasses, jewelries as a mascot"
+  - "a detailed, stunning, beautiful, colorful, animated beaver as a mascot"
+  - "a highly detailed, cool lighting, clear, colorful animated llama wearing as a mascot"
+prompt_format: "{prompt}, with {logo_description} as a background"
 hyper_params: 
   prior_guidance_scale: 1.0
   height: 512
   width: 512
   num_inference_steps: 30
 logo_descriptions: 
-  0: ""
-  1: ""
-  2: ""
-  3: ""
-  4: ""
+  1: "glowing yellow and blue lightning rounded Mobius strip"
+  2: "vintage, lord of the ring rounded Mobius strip shaped as a ring"
+  3: "leaves, colorful, greenish rounded Mobius strip"
+  4: "redish, flamery, fire, beautiful rounded Mobius strip"
+  5: "beautiful, detailed, colorful rounded Mobius strip"
 output_image_directory: ""

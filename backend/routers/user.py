@@ -53,6 +53,15 @@ async def get_current_user(
         logger.error(f"{type(e).__name__}: {e}")
         raise e
 
+@router.post("/user/delete-session")
+async def del_session(response: Response, session_id = Depends(cookie)):
+    try:
+        from backend.app_models.session import delete_session
+        await delete_session(session_id, response)
+        return "deleted session"
+    except Exception as e:
+        logger.error(f"{type(e).__name__}: {e}")
+        raise e
 
 @router.get("/whoami", dependencies=[Depends(cookie)])
 async def whoami(session_data: SessionData = Depends(verifier)):

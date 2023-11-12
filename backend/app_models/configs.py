@@ -18,6 +18,7 @@ class ModelConfig(BaseSettings):
     model_name: Text
     lora_model_path: Text
     example_prompts: List
+    prompt_format: Text
     hyper_params: Dict
     logo_descriptions: Dict
     output_image_directory: Text
