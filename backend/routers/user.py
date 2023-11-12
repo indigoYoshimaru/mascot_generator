@@ -53,53 +53,81 @@ async def get_current_user(
         logger.error(f"{type(e).__name__}: {e}")
         raise e
 
+
 @router.get("/whoami", dependencies=[Depends(cookie)])
 async def whoami(session_data: SessionData = Depends(verifier)):
     return session_data
 
 
-@router.post("/user/get-queue-no/")
-def get_queue_no(
-    visitor_id: str,
-    generation_id: str,
+@router.get(
+    "/get-current-info",
+    response_model=schemas.AllInfo,
+    dependencies=[Depends(cookie)],
+)
+def get_current_info(
+    session_data: SessionData = Depends(verifier),
     db: Session = Depends(get_db),
 ):
     try:
-        # logger.info(f"{visitor_info=}")
-        # visitor_id = visitor_info.visitor_id
-        logger.info(f"{visitor_id} getting queue number")
-        queue_no = crud.get_user_queue(db, generation_id)
-    except Exception as e:
-        logger.error(f"{type(e).__name__}: {e}")
-        raise e
-    else:
-        logger.info(f"{visitor_id=}: {queue_no=}")
-        return queue_no
-
-
-@router.post("/user/get-generation-left/{visitor_id}")
-def get_generation_left(
-    visitor_id: str,
-    db: Session = Depends(get_db),
-):
-    try:
-        logger.info(f"{visitor_id} getting generation left")
-        user = crud.get_user(db, visitor_id)
-        assert user, "Invalid user"
-        generation_left = crud.get_user_generation_left(db, visitor_id)
+        logger.info(f"{session_data=}")
+        visitor_id = session_data.visitor_id
+        assert visitor_id, "Invalid visitor id"
+        current_info = crud.get_current_info(db, visitor_id)
 
     except AssertionError as e:
         logger.error(f"{type(e).__name__}: {e}")
         raise HTTPException(
-            status_code=404,
-            detail=dict(message=f"{visitor_id} not found"),
+            status_code=404, detail=dict(message=f"{visitor_id} not found")
         )
     except Exception as e:
         logger.error(f"{type(e).__name__}: {e}")
         raise e
     else:
-        logger.info(f"{visitor_id=}: {generation_left=}")
-        return generation_left
+        return current_info
+
+
+# @router.post("/user/get-queue-no/")
+# def get_queue_no(
+#     visitor_id: str,
+#     generation_id: str,
+#     db: Session = Depends(get_db),
+# ):
+#     try:
+#         # logger.info(f"{visitor_info=}")
+#         # visitor_id = visitor_info.visitor_id
+#         logger.info(f"{visitor_id} getting queue number")
+#         queue_no = crud.get_user_queue(db, generation_id)
+#     except Exception as e:
+#         logger.error(f"{type(e).__name__}: {e}")
+#         raise e
+#     else:
+#         logger.info(f"{visitor_id=}: {queue_no=}")
+#         return queue_no
+
+
+# @router.post("/user/get-generation-left/{visitor_id}")
+# def get_generation_left(
+#     visitor_id: str,
+#     db: Session = Depends(get_db),
+# ):
+#     try:
+#         logger.info(f"{visitor_id} getting generation left")
+#         user = crud.get_user(db, visitor_id)
+#         assert user, "Invalid user"
+#         generation_left = crud.get_user_generation_left(db, visitor_id)
+
+#     except AssertionError as e:
+#         logger.error(f"{type(e).__name__}: {e}")
+#         raise HTTPException(
+#             status_code=404,
+#             detail=dict(message=f"{visitor_id} not found"),
+#         )
+#     except Exception as e:
+#         logger.error(f"{type(e).__name__}: {e}")
+#         raise e
+#     else:
+#         logger.info(f"{visitor_id=}: {generation_left=}")
+#         return generation_left
 
 
 @router.get("/user/get-image-history/{visitor_id}")
@@ -108,4 +136,3 @@ def get_image_history(
     db: Session = Depends(get_db),
 ):
     ...
-

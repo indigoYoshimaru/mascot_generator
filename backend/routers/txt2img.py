@@ -13,19 +13,18 @@ logger = get_logger(name=__name__)
 
 
 @router.post("/generate", dependencies=[Depends(cookie)])
-async def generate_image(
-    generation_data: None, 
+def generate_image(
+    generation_data: schemas.GenerationRequest, 
     session_data: SessionData = Depends(verifier)):
-    ...
+
     """Generate image: 
     Args: 
-        generation_data: class includes: 
-            - prompt
-            - option_id
+        generation_data: 
+            - prompt: string
+            - option_id: int
     Return:
-        response: class include:
-            - visitor_id
-            - queue
-            - generation left
-            - image_path
+        response: GenerationInfo
     """
+
+    
+
