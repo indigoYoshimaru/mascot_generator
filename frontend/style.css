@@ -1,0 +1,110 @@
+#gallery>img {
+    display: block;
+    margin: auto;
+    margin-top: 3%
+;    width: 80%;
+}
+
+.optionblock{
+    display: inline-block;
+    padding: 10px;
+}
+
+#options{
+    text-align: center;
+}
+.parent {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 50px;
+    grid-row-gap: 0px;
+    }
+    
+body > main {
+    width: 90% !important;
+}
+
+.h2scale {
+    margin-top: -1%;
+}
+
+body > main > h1 {
+    margin: 0;
+}
+
+grid {
+    margin: -3%
+}
+article {
+    margin: 2%
+}
+
+:is(button,input[type=submit],input[type=button],[role=button]).contrast {
+    --background-color: var(--contrast);
+    --border-color: var(--contrast);
+    --color: var(--contrast-inverse);
+}
+.switcher {
+    position: fixed;
+    right: calc(var(--spacing)/ 2 + var(--scrollbar-width,0px));
+    bottom: var(--spacing);
+    width: auto;
+    margin-bottom: 0;
+    padding: 0.75rem;
+    border-radius: 2rem;
+    box-shadow: var(--card-box-shadow);
+    line-height: 1;
+    text-align: right;
+}
+/* 
+button {
+    margin: 0;
+    overflow: visible;
+    font-family: inherit;
+    text-transform: none;
+} */
+*, ::after, ::before {
+    box-sizing: border-box;
+    background-repeat: no-repeat;
+}
+/* 
+:root {
+    --icon-external: url(data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgb(115, 130, 140)' opacity='0.66' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'%3E%3C/path%3E%3Cpolyline points='15 3 21 3 21 9'%3E%3C/polyline%3E%3Cline x1='10' y1='14' x2='21' y2='3'%3E%3C/line%3E%3C/svg%3E);
+    --icon-check: url(data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgb(255, 255, 255)' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E);
+    --icon-check-dark: url(data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(0, 0, 0, 0.75)' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E);
+} */
+:root {
+    --scrollbar-width: 0px;
+}
+::after, ::before {
+    text-decoration: inherit;
+    vertical-align: inherit;
+}
+*, ::after, ::before {
+    box-sizing: border-box;
+    background-repeat: no-repeat;
+}
+.switcher::after {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 0.15rem solid currentColor;
+    border-radius: 50%;
+    background: linear-gradient(to right,currentColor 0,currentColor 50%,transparent 50%);
+    content: "";
+    vertical-align: bottom;
+    transition: transform var(--transition);
+    font-family: inherit
+}
+::after, ::before {
+    text-decoration: inherit;
+    vertical-align: inherit;
+}
+*, ::after, ::before {
+    box-sizing: border-box;
+    background-repeat: no-repeat;
+}
+::selection {
+    background-color: var(--primary-focus);
+}

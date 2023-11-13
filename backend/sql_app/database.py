@@ -10,7 +10,7 @@ logger.info(f"{app_config=}")
 engine = create_engine(
     url=app_config.db_config.url,
     connect_args=app_config.db_config.connect_args,
-    echo=True,
+    echo=False,
 )
 
 app_config.db_config.session_args['bind'] = engine

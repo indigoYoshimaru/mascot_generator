@@ -24,4 +24,7 @@ def get_settings():
     from backend.app_models.configs import AppConfig
     return AppConfig(cfg_dir='backend/configs/app_cfg.yaml')
 
+
+
+
 app_config = get_settings()

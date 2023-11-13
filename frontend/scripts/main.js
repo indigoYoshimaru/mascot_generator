@@ -77,8 +77,10 @@ async function update() {
         ui.htmlNumberInQueue.textContent = info.generation_info.queue_no;
     }
 
-    if (info.image)
-        ui.htmlGallery.appendChild(document.createElement("img")).src = info.image.path;
+    if (info.generation_info){
+        ui.htmlGallery.innerHTML="";
+        ui.htmlGallery.appendChild(document.createElement("img")).src = info.generation_info.image.path;
+    }
 }
 
 async function getSamplePrompt() {
@@ -88,6 +90,7 @@ async function getSamplePrompt() {
 }
 
 async function run() {
+    lock();
     update();
     getSamplePrompt();
     let _ = await reset();
@@ -130,14 +133,16 @@ async function run() {
         }
     });
 
-    ui.htmlPrompt.addEventListener("dblclick", function () {
-        if (!ui.htmlPrompt.value.includes(ui.htmlPrompt.placeholder))
+    ui.htmlPrompt.addEventListener("dblclick", function (e) {
+        if (e.ctrlKey && !ui.htmlPrompt.value.includes(ui.htmlPrompt.placeholder))
             ui.htmlPrompt.value += ui.htmlPrompt.placeholder;
     });
+    unlock();
     setInterval(update, 5000);
     console.log(result);
 
 }
 
+lock();
 
 setTimeout(run, 1000);

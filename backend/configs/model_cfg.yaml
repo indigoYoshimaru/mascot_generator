@@ -4,17 +4,17 @@ lora_model_path: "models/weight/kandinsky-2-2-logo/checkpoint-2500"
 example_prompts: 
   - "a detailed, large, stunning, cool lighting, funky background, clear, colorful, animated smiley monkey wearing hat, shirt, and dark glasses, jewelries as a mascot"
   - "a detailed, stunning, beautiful, colorful, animated beaver as a mascot"
-  - "a highly detailed, cool lighting, clear, colorful animated llama wearing as a mascot"
-prompt_format: "{prompt}, with {logo_description} as a background"
+  - "a highly detailed, cool lighting, clear, colorful animated llama dressing in cool fancy clothes as a mascot"
+prompt_format: "{prompt}, with {logo_description} on the animal chest or as a background"
 hyper_params: 
   prior_guidance_scale: 1.0
   height: 512
   width: 512
   num_inference_steps: 30
 logo_descriptions: 
-  1: "glowing yellow and blue lightning rounded Mobius strip"
-  2: "vintage, lord of the ring rounded Mobius strip shaped as a ring"
-  3: "leaves, colorful, greenish rounded Mobius strip"
-  4: "redish, flamery, fire, beautiful rounded Mobius strip"
-  5: "beautiful, detailed, colorful rounded Mobius strip"
+  1: "glowing yellow and blue lightning One Mount logo with rounded Mobius strip as One Mount logo"
+  2: "vintage, lord of the ring rounded Mobius strip shaped as a ring as One Mount logo"
+  3: "leaves, colorful, greenish rounded Mobius strip as One Mount logo"
+  4: "redish, flamery, fire, beautiful rounded Mobius strip as One Mount logo"
+  5: "purple, pink, blue futuristic, sci-fi rounded Mobius strip as One Mount logo"
 output_image_directory: ""

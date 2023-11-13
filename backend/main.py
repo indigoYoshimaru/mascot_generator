@@ -3,21 +3,32 @@ import os
 from fastapi import FastAPI
 
 from fastapi.staticfiles import StaticFiles
-from backend.utils import get_logger
 from backend.routers import get_all_routers
 from fastapi.middleware.cors import CORSMiddleware
-from backend.sql_app.database import SessionLocal, engine
+from backend.sql_app.database import engine
 from backend.sql_app import crud, models, database
 from backend.app_models import schemas
-
 # logger = get_logger(name = __name__)
 
-# def load_model():
-#     vsc_setting = SpellingCorrectorSettings(
-#         cfg_dir="search_api/configs/vsc_model_cfg.yaml"
-#     )
-#     return SpellingCorrectorModel(vsc_setting)
+subapi = FastAPI()
 
+
+@subapi.get("/run-model")
+def run_model():
+    try: 
+        from backend.app_models.txt2img import load_model
+        model = load_model()
+        db = database.SessionLocal()
+        # mp.set_start_method('spawn')
+        # queue = mp.Queue()
+        # pf = mp.Process(target=model.run, args=(queue, db,), daemon=True)
+        # pf.start()
+        # pf.join()
+        # mp.spawn(model.run, args=(db,), nprocs=1)
+        model.run(db)
+    except Exception as e: 
+        print(e)
+        raise e 
 
 try:
 
@@ -49,6 +60,8 @@ try:
 
     for router in get_all_routers():
         app.include_router(router)
+    
+    app.mount("/subapi", subapi)
     
     
 except Exception as e:

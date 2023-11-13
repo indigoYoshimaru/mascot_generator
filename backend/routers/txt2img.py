@@ -56,8 +56,10 @@ def generate_image(
         image_path = os.path.join(
             "frontend/images",
             visitor_id,
-            f"{start_time}.png",
         )
+        if not os.path.exists(image_path):
+            os.mkdir(image_path)
+        image_path = os.path.join(image_path, f'{start_time}.png')
         # 4. write db
         response_model = crud.create_generation(
             db,
@@ -69,7 +71,6 @@ def generate_image(
         logger.info(
             f"Create new generation {response_model} from {visitor_id} at {curr_dt}"
         )
-        # 5. call background task
     except MemoryError as e:
         logger.error(f"{type(e).__name__}: {e}")
         raise HTTPException(

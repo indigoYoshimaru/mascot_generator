@@ -35,6 +35,10 @@ def get_user(db: Session, visitor_id: Text):
         raise e
 
 
+def get_user_by_id(db: Session, id: Text):
+    return db.query(models.User).filter(models.User.id == id).first()
+
+
 def get_current_info(db: Session, visitor_id: Text):
     try:
         user = get_user(db, visitor_id)
@@ -62,10 +66,9 @@ def get_latest_generation_info(db: Session, visitor_id: Text):
         user = get_user(db, visitor_id)
         generation = (
             db.query(models.Generation)
-            .filter(models.User.visitor_id == visitor_id)
+            .filter(models.Generation.user_id == user.id)
             .order_by(models.Generation.start_time.desc())
         ).first()
-        logger.info(f"{generation=}")
         if not generation:
             generation_info = schemas.GenerationInfo(
                 prompt=schemas.Prompt(),
@@ -73,11 +76,14 @@ def get_latest_generation_info(db: Session, visitor_id: Text):
             )
             return generation_info
 
+        logger.info(f"{generation.id=}")
         prompt = get_prompt_by_id(db, generation.prompt_id)
         image = get_image_by_id(db, generation.image_id)
+        image_path = image.path.replace('frontend/', '')
+        logger.info(f'{image.path=}')
         generation_info = schemas.GenerationInfo(
             prompt=schemas.Prompt(prompt=prompt.prompt),
-            image=schemas.Image(path=image.path),
+            image=schemas.Image(path=image_path),
             queue_no=generation.queue_no,
             status=generation.status,
             start_time=generation.start_time,
@@ -246,3 +252,17 @@ def create_generation(
 
 
 # UPDATE
+
+
+def update_model_run_all(db: Session, generation: models.Generation):
+    try:
+        generation = __add__(db, generation)
+        user = get_user_by_id(db, generation.user_id)
+        user.gen_left -= 1
+        user = __add__(db, user)
+
+    except Exception as e:
+        logger.error(f"{type(e).__name__}: {e}")
+        raise e
+    else:
+        return generation

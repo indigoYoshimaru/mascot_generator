@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
     <meta charset="UTF-8" />
@@ -7,45 +7,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="version" content="1" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
-    <title>OM Mascot</title>
+    <link rel="stylesheet" href="style.css" />
+    <title>OM Mascot Generator</title>
 </head>
 
 <body>
-    <main class="container">
-        <h1>OM Mascot Generator</h1>
-        <article>
-            <h3>Image left per day: <span id="img-left"></span></h3>
-            <h3>Number in queue: <span id="number-in-queue"></span></h3>
-        </article>
-
+    <main>
+        <h1 style="margin:auto;text-align: center;"><kbd>OM Mascot Generator</kbd></h1>
         <div class="grid">
             <article>
-                <h2>Prompt</h2>
-                <textarea id="prompt" rows="8"></textarea>
-                <p>Double click to add the placeholder to prompt</p>
-                <section>
-                    <h2>Logo options</h2>
-                    <input type="radio" name="option" value="1" />
-                    <label><img width="80px" src="logo-options/1.png" /></label>
-                    <input type="radio" name="option" value="2" />
-                    <label><img width="80px" src="logo-options/2.png" /></label>
-                    <input type="radio" name="option" value="3" />
-                    <label><img width="80px" src="logo-options/3.png" /></label>
-                    <input type="radio" name="option" value="4" />
-                    <label><img width="80px" src="logo-options/4.png" /></label>
-                    <input type="radio" name="option" value="5" />
-                    <label><img width="80px" src="logo-options/5.png" /></label>
+                <div class="parent">
+                    <h6>Image left per day: <span id="img-left"></span></h6>
+                    <h6>Number in queue: <span id="number-in-queue"></span></h6>
 
+                </div>
+                <!-- <h6>Image left per day: <span id="img-left"></span></h6>
+                <h6>Number in queue: <span id="number-in-queue"></span></h6> -->
+                <h2>Prompt</h2>
+                <textarea id="prompt" rows="4"></textarea>
+                <p><ins style="font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;">Ctrl + double click</ins> to add the text in the placeholder as prompt</p>
+                <section>
+                    <h2>Color and pattern options</h2>
+                    <div id="options">
+                        <div class="optionblock">
+                            <input type="radio" name="option" value="1" />
+                            <label><img width="64px" src="logo-options/1.png" /></label>
+                        </div>
+
+                        <div class="optionblock">
+                            <input type="radio" name="option" value="2" />
+                            <label><img width="64px" src="logo-options/2.png" /></label>
+                        </div>
+
+                        <div class="optionblock">
+                            <input type="radio" name="option" value="3" />
+                            <label><img width="64px" src="logo-options/3.png" /></label>
+                        </div>
+
+                        <div class="optionblock">
+                            <input type="radio" name="option" value="4" />
+                            <label><img width="64px" src="logo-options/4.png" /></label>
+                        </div>
+
+                        <div class="optionblock">
+                            <input type="radio" name="option" value="5" />
+                            <label><img width="64px" src="logo-options/5.png" /></label>
+                        </div>
+
+                    </div>
                 </section>
-                <button id="generate-button">Generate</button>
+                <button id="generate-button" class="outline" style="width:50%; margin: auto
+                ">Generate</button>
+
             </article>
             <article>
-                <h2>Image gallery</h2>
+                <h2>Image gallery</hß2>
                 <div id="gallery"></div>
             </article>
         </div>
-        <script src="scripts/main.js" type="module"></script>
+        <script src="scripts/common.js"></script>
+        <!-- <script src=//unpkg.com/pico-common@0.10.11/bin/pico.min.js></script> -->
+
     </main>
+
+    <script src="scripts/main.js" type="module"></script>
 </body>
 
 </html>
