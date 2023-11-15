@@ -4,7 +4,8 @@ let ui = {
     htmlPrompt: document.querySelector("#prompt"),
     htmlGallery: document.querySelector("#gallery"),
     htmlImagesLeft: document.querySelector("#img-left"),
-    htmlNumberInQueue: document.querySelector("#number-in-queue")
+    htmlNumberInQueue: document.querySelector("#number-in-queue"), 
+    htmlImgGallery: document.querySelector("#img-gallery"), 
 }
 
 let locking = false;
@@ -81,6 +82,7 @@ async function update() {
         ui.htmlGallery.innerHTML="";
         ui.htmlGallery.appendChild(document.createElement("img")).src = info.generation_info.image.path;
     }
+
 }
 
 async function getSamplePrompt() {
@@ -89,10 +91,20 @@ async function getSamplePrompt() {
     ui.htmlPrompt.placeholder = sample;
 }
 
+async function getImageHistory(){
+    let images = await (await fetch("/get-image-history")).json();
+    ui.htmlImgGallery.innerHTML="";
+    for (let idx in images){
+        let image = images[idx]
+        ui.htmlImgGallery.appendChild(document.createElement("img")).src=image.path.replace('frontend/', '');
+    }
+}
+
 async function run() {
     lock();
     update();
     getSamplePrompt();
+    getImageHistory();
     let _ = await reset();
     let result = await register();
 
@@ -139,6 +151,7 @@ async function run() {
     });
     unlock();
     setInterval(update, 5000);
+    setInterval(getImageHistory, 50000);
     console.log(result);
 
 }

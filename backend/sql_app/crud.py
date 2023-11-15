@@ -146,8 +146,9 @@ def get_image_by_id(db: Session, image_id: int):
         return image
 
 
-def get_images_by_user(db: Session, visitor_id: Text):
-    ...
+def get_all_images(db: Session):
+    image_obj = db.query(models.Image.path).order_by(models.Image.id.desc()).all()
+    return image_obj
 
 
 def get_running_generation_by_visistor_id(db, visitor_id: Text):

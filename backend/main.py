@@ -19,12 +19,6 @@ def run_model():
         from backend.app_models.txt2img import load_model
         model = load_model()
         db = database.SessionLocal()
-        # mp.set_start_method('spawn')
-        # queue = mp.Queue()
-        # pf = mp.Process(target=model.run, args=(queue, db,), daemon=True)
-        # pf.start()
-        # pf.join()
-        # mp.spawn(model.run, args=(db,), nprocs=1)
         model.run(db)
     except Exception as e: 
         print(e)
@@ -32,7 +26,6 @@ def run_model():
 
 try:
 
-    print(f"Starting app...")
     models.Base.metadata.create_all(bind=engine)
 
     app = FastAPI(
@@ -63,6 +56,7 @@ try:
     
     app.mount("/subapi", subapi)
     
+    print(f"Starting app...")
     
 except Exception as e:
     print(e)

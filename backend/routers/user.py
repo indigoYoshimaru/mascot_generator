@@ -139,9 +139,13 @@ def get_current_info(
 #         return generation_left
 
 
-@router.get("/user/get-image-history/{visitor_id}")
+@router.get("/get-image-history/")
 def get_image_history(
-    visitor_id: str,
     db: Session = Depends(get_db),
 ):
-    ...
+    try: 
+        images = crud.get_all_images(db)
+        return images
+    except Exception as e:
+        logger.error(f"{type(e).__name__}: {e}")
+        raise e
