@@ -1,0 +1,10 @@
+accelerate==0.21.0
+fastapi==0.95.1
+fastapi-sessions==0.3.2
+numpy==1.23.5
+optipack==0.0.23.dev0
+pydantic==1.10.12
+pydantic_core==2.0.2
+torch==2.1.0
+uvicorn==0.21.1
+gunicorn

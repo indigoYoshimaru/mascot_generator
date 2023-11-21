@@ -81,6 +81,7 @@ async function update() {
     if (info.generation_info){
         ui.htmlGallery.innerHTML="";
         ui.htmlGallery.appendChild(document.createElement("img")).src = info.generation_info.image.path;
+        getImageHistory();
     }
 
 }
@@ -96,7 +97,7 @@ async function getImageHistory(){
     ui.htmlImgGallery.innerHTML="";
     for (let idx in images){
         let image = images[idx]
-        ui.htmlImgGallery.appendChild(document.createElement("img")).src=image.path.replace('frontend/', '');
+        ui.htmlImgGallery.appendChild(document.createElement("img")).src=image;
     }
 }
 
@@ -104,7 +105,7 @@ async function run() {
     lock();
     update();
     getSamplePrompt();
-    getImageHistory();
+    await getImageHistory();
     let _ = await reset();
     let result = await register();
 
@@ -150,8 +151,7 @@ async function run() {
             ui.htmlPrompt.value += ui.htmlPrompt.placeholder;
     });
     unlock();
-    setInterval(update, 5000);
-    setInterval(getImageHistory, 50000);
+    setInterval(update, 6000);
     console.log(result);
 
 }
